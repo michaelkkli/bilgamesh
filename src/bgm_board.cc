@@ -2,12 +2,20 @@
 #include <tuple>
 #include <utility>
 #include <vector>
+#include <cstdlib>
 
 template <class T>
 _bgm_board<T>::_bgm_board () : black_move (true)
 {
   hboard[0] = 0x0000000000555555ULL;
   hboard[1] = 0x0000000000555555ULL;
+}
+
+template <class T>
+bool
+_bgm_board<T>::is_black_move () const
+{
+  return black_move;
 }
 
 template <class T>
@@ -58,6 +66,15 @@ _bgm_board<T>::set (const std::vector<int>& men_black, const std::vector<int>& k
 
   hboard[1] = _bgm_get_reverse_bitpairs (hboard[1]);
   black_move = bm;
+}
+
+template <class T>
+void
+_bgm_board<T>::apply (const _bgm_action<T>& in)
+{
+  in.apply (hboard);
+
+  black_move = !black_move;
 }
 
 template <class T>

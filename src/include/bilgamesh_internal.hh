@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include <iostream>
+#include <random>
 #include <set>
 #include <utility>
 #include <vector>
@@ -38,13 +40,19 @@ class _bgm_action {
 };
 
 template <class T>
+std::ostream&
+operator << (std::ostream&, const _bgm_action<T>&);
+
+template <class T>
 class _bgm_board {
   public:
     _bgm_board ();
+    bool is_black_move () const;
     bool swap_turn ();
     void count_black (int& men, int& kings) const;
     void count_white (int& men, int& kings) const;
     void set (const std::vector<int>& men_black, const std::vector<int>& kings_black, const std::vector<int>& men_white, const std::vector<int>& kings_white, bool bm);
+    void apply (const _bgm_action<T>&);
     void get_actions (std::vector<_bgm_action<T>>&);
   private:
     void get_step_man_move (uint64_t black_board, uint64_t white_board, int pos, std::vector<_bgm_action<T>>&);
@@ -65,6 +73,23 @@ class _bgm_board {
     static constexpr uint64_t BH_move_mask = 0xFF3FFF3FFF3FFF00;
     static constexpr uint64_t man_to_king_mask = 0xFF00000000000000;
     static constexpr uint64_t fourfive_mask = 0x00FF00FF00FF00FF;
+};
+
+template <class T>
+class _bgm_strategy_random {
+  public:
+    _bgm_action<T> operator () (const _bgm_board<T>&, const std::vector<_bgm_action<T>>&);
+};
+
+template <class T>
+class _bgm_strategy_monte_carlo {
+  public:
+    _bgm_strategy_monte_carlo (int games = 100, int moves = 100, double king_multiplier = 1.5);
+    _bgm_action<T> operator () (const _bgm_board<T>&, const std::vector<_bgm_action<T>>&);
+  private:
+    int num_games;
+    int num_moves;
+    double kings_multiplier;
 };
 
 void

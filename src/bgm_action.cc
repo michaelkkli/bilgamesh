@@ -34,14 +34,22 @@ template <class T>
 T
 _bgm_action<T>::first () const
 {
-  return start_;
+  if (black_move) {
+    return start_;
+  } else {
+    return 33 - start_;
+  }
 }
 
 template <class T>
 T
 _bgm_action<T>::last () const
 {
-  return end_;
+  if (black_move) {
+    return end_;
+  } else {
+    return 33 - end_;
+  }
 }
 
 template <class T>
@@ -103,7 +111,7 @@ _bgm_action<T>::apply (uint64_t* board) const
     op_kings |= (0x10ULL << 2*(i - 1));
   }
 
-  y = (y & !op_men & !op_kings);
+  y = (y & ~op_men & ~op_kings);
 
   if (black_move) {
     board[0] = x; board[1] = y;
@@ -112,4 +120,14 @@ _bgm_action<T>::apply (uint64_t* board) const
   }
 }
 
+template <class T>
+std::ostream&
+operator << (std::ostream& os, const _bgm_action<T>& in)
+{
+  os << in.first () << "-" << in.last ();
+  return os;
+}
+
 template class _bgm_action<int8_t>;
+
+template std::ostream& operator << (std::ostream&, const _bgm_action<int8_t>&);
