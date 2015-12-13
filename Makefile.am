@@ -1,4 +1,5 @@
 TESTS = src/test/success.test \
+	src/test/bgm_board-2.test \
 	src/test/bgm_board-1.test \
 	src/test/bgm_action-1.test \
 	src/test/xfail.test 
@@ -18,6 +19,10 @@ src_test_xfail_test_SOURCES = src/test/xfail.cc
 src_test_bgm_board_1_test_SOURCES = src/test/bgm_board-1.cc
 src_test_bgm_board_1_test_CPPFLAGS = -I"$(srcdir)/src/include"
 src_test_bgm_board_1_test_LDADD = libbgm_internal.a
+
+src_test_bgm_board_2_test_SOURCES = src/test/bgm_board-2.cc
+src_test_bgm_board_2_test_CPPFLAGS = -I"$(srcdir)/src/include"
+src_test_bgm_board_2_test_LDADD = libbgm_internal.a
 
 src_test_bgm_action_1_test_SOURCES = src/test/bgm_action-1.cc
 src_test_bgm_action_1_test_CPPFLAGS = -I"$(srcdir)/src/include"

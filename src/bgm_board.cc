@@ -6,8 +6,16 @@
 template <class T>
 _bgm_board<T>::_bgm_board () : black_move (true)
 {
-  hboard[0] = 0x0000000000555555;
-  hboard[1] = 0x0000000000555555;
+  hboard[0] = 0x0000000000555555ULL;
+  hboard[1] = 0x0000000000555555ULL;
+}
+
+template <class T>
+bool
+_bgm_board<T>::swap_turn ()
+{
+  black_move = !black_move;
+  return black_move;
 }
 
 template <class T>
@@ -28,11 +36,37 @@ _bgm_board<T>::count_white (int& men, int& kings) const
 
 template <class T>
 void
+_bgm_board<T>::set (const std::vector<int>& men_black, const std::vector<int>& kings_black, const std::vector<int>& men_white, const std::vector<int>& kings_white, bool bm)
+{
+  hboard[0] = 0x0ULL; hboard[1] = 0x0ULL;
+
+  for (auto i : men_black) {
+    hboard[0] |= (0x1ULL << 2*(i - 1));
+  }
+
+  for (auto i : kings_black) {
+    hboard[0] |= (0x2ULL << 2*(i - 1));
+  }
+
+  for (auto i : men_white) {
+    hboard[1] |= (0x1ULL << 2*(i - 1));
+  }
+
+  for (auto i : kings_white) {
+    hboard[1] |= (0x2ULL << 2*(i - 1));
+  }
+
+  hboard[1] = _bgm_get_reverse_bitpairs (hboard[1]);
+  black_move = bm;
+}
+
+template <class T>
+void
 _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
 {
   int num_men, num_kings;
   uint64_t chboard, ohboard;
-  std::set<T> men_pos, kings_pos;
+  std::vector<T> men_pos, kings_pos;
 
   actions.clear();
 
@@ -151,7 +185,7 @@ _bgm_board<T>::get_step_man_capture (uint64_t chboard, uint64_t ohboard, int pos
   uint64_t landing_pos, capture_pos;
   int8_t clear_offset, occupied_offset, capture_offset;
 
-  std::set<T> men_captured, kings_captured;
+  std::vector<T> men_captured, kings_captured;
 
   // Overlap-clear; action mask; fourfive, threefour other-occupied.
   std::tuple<int8_t, uint64_t, int8_t, int8_t> action_spec[] =
@@ -284,7 +318,7 @@ _bgm_board<T>::get_step_king_capture (uint64_t chboard, uint64_t ohboard, int po
   uint64_t landing_pos, capture_pos;
   int8_t clear_offset, occupied_offset, capture_offset;
 
-  std::set<T> men_captured, kings_captured;
+  std::vector<T> men_captured, kings_captured;
 
   // Overlap-clear; action mask; fourfive, threefour other-occupied.
   std::tuple<int8_t, uint64_t, int8_t, int8_t> action_spec[] =
@@ -324,4 +358,4 @@ _bgm_board<T>::get_step_king_capture (uint64_t chboard, uint64_t ohboard, int po
   }
 }
 
-template class _bgm_board<uint8_t>;
+template class _bgm_board<int8_t>;

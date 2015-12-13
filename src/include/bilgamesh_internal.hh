@@ -19,7 +19,7 @@ template <class T>
 class _bgm_action {
   public:
     _bgm_action ();
-    _bgm_action (bool, _bgm_move_capture, _bgm_piece_to_piece, T start, T end, const std::set<T>& = {}, const std::set<T>& = {});
+    _bgm_action (bool, _bgm_move_capture, _bgm_piece_to_piece, T start, T end, const std::vector<T>& = {}, const std::vector<T>& = {});
     operator bool () const;
     bool is_man_to_king () const;
     T first () const;
@@ -33,21 +33,19 @@ class _bgm_action {
     _bgm_piece_to_piece piece_to_piece;
     T start_;
     T end_;
-    std::set<T> captured_men;
-    std::set<T> captured_kings;
+    std::vector<T> captured_men;
+    std::vector<T> captured_kings;
 };
 
 template <class T>
 class _bgm_board {
   public:
     _bgm_board ();
+    bool swap_turn ();
     void count_black (int& men, int& kings) const;
     void count_white (int& men, int& kings) const;
+    void set (const std::vector<int>& men_black, const std::vector<int>& kings_black, const std::vector<int>& men_white, const std::vector<int>& kings_white, bool bm);
     void get_actions (std::vector<_bgm_action<T>>&);
-//    void get_step_man_move (int pos, std::set<_bgm_action<T>>&);
-//    void get_step_man_capture (int pos, std::set<_bgm_action<T>>&);
-//    void get_step_king_move (int pos, std::set<_bgm_action<T>>&);
-//    void get_step_king_capture (int pos, std::set<_bgm_action<T>>&);
   private:
     void get_step_man_move (uint64_t black_board, uint64_t white_board, int pos, std::vector<_bgm_action<T>>&);
     void get_step_king_move (uint64_t black_board, uint64_t white_board, int pos, std::vector<_bgm_action<T>>&);
@@ -70,7 +68,7 @@ class _bgm_board {
 };
 
 void
-_bgm_get_occupied_positions (uint64_t, std::set<uint8_t>&, int max);
+_bgm_get_occupied_positions (uint64_t, std::vector<int8_t>&, int max);
 
 uint64_t
 _bgm_get_reverse_bitpairs (uint64_t);

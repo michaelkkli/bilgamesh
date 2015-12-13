@@ -4,7 +4,7 @@
 
 int main (int argc, char *argv[])
 {
-  _bgm_action<uint8_t> a;
+  _bgm_action<int8_t> a;
 
   if (a) {
     abort();

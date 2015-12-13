@@ -13,7 +13,7 @@ _bgm_action<T>::_bgm_action ()
 }
 
 template <class T>
-_bgm_action<T>::_bgm_action (bool b, _bgm_move_capture mc, _bgm_piece_to_piece ptp, T s, T e, const std::set<T>& cm, const std::set<T>& ck) : black_move(b), move_capture(mc), piece_to_piece(ptp), start_(s), end_(e), captured_men(cm), captured_kings(ck)
+_bgm_action<T>::_bgm_action (bool b, _bgm_move_capture mc, _bgm_piece_to_piece ptp, T s, T e, const std::vector<T>& cm, const std::vector<T>& ck) : black_move(b), move_capture(mc), piece_to_piece(ptp), start_(s), end_(e), captured_men(cm), captured_kings(ck)
 {
 }
 
@@ -56,8 +56,8 @@ _bgm_action<T>&
 _bgm_action<T>::join (const _bgm_action<T>& in)
 {
   end_ = in.end_;
-  captured_men.insert (in.captured_men.begin (), in.captured_men.end ());
-  captured_kings.insert (in.captured_kings.begin (), in.captured_kings.end ());
+  captured_men.insert (captured_men.end(), in.captured_men.begin (), in.captured_men.end ());
+  captured_kings.insert (captured_kings.end(), in.captured_kings.begin (), in.captured_kings.end ());
 
   if ((_bgm_man_to_man == piece_to_piece) & (_bgm_man_to_man != in.piece_to_piece)) {
     piece_to_piece = _bgm_man_to_king;
@@ -112,4 +112,4 @@ _bgm_action<T>::apply (uint64_t* board) const
   }
 }
 
-template class _bgm_action<uint8_t>;
+template class _bgm_action<int8_t>;

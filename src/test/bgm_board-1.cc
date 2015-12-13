@@ -3,7 +3,7 @@
 
 int main (int argc, char *argv[])
 {
-  _bgm_board<uint8_t> a;
+  _bgm_board<int8_t> a;
   int men, kings;
 
   a.count_black (men, kings);
@@ -16,7 +16,7 @@ int main (int argc, char *argv[])
     abort();
   }
 
-  std::vector<_bgm_action<uint8_t>> actions;
+  std::vector<_bgm_action<int8_t>> actions;
   a.get_actions(actions);
 
   if (7!=actions.size()) {
