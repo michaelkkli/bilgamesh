@@ -17,6 +17,8 @@ _bgm_strategy_monte_carlo<T>::operator () (const _bgm_board<T>& board, const std
   int num_actions = in.size ();
   int men, kings;
   bool black_move = board.is_black_move ();
+  bool victory_encountered;
+  bool black_victory;
 
   if (black_move) {
     board.count_black (men, kings);
@@ -33,34 +35,70 @@ _bgm_strategy_monte_carlo<T>::operator () (const _bgm_board<T>& board, const std
 
   for (int act = 0; act < num_actions; act++) {
     for (int game = 0; game < num_games; game++) {
+      victory_encountered = false;
+
       tmp_board = board;
-      tmp_board.apply (in[act]);
+      tmp_board.apply (in[act]); // Play switches to other side.
+      tmp_board.get_actions (vacts);
 
-      for (int move = 0; move < num_moves; move++) {
-	tmp_board.get_actions (vacts);
-	if (vacts.empty ()) {
-	  break;
-	}
-	tmp_board.apply (rand_strat (board, vacts));
-      }
-
-      if (black_move) {
-	tmp_board.count_black (men, kings);
-	men_count[act] += men;
-	kings_count[act] += kings;
-
-	tmp_board.count_white (men, kings);
-	men_count[act] -= men;
-	kings_count[act] -= kings;
+      if (vacts.empty ()) {
+	victory_encountered = true;
+	black_victory = !tmp_board.is_black_move ();
       } else {
-	tmp_board.count_black (men, kings);
-	men_count[act] -= men;
-	kings_count[act] -= kings;
+	for (int move = 0; move < num_moves; move++) {
+	  tmp_board.apply (rand_strat (board, vacts));
 
-	tmp_board.count_white (men, kings);
-	men_count[act] += men;
-	kings_count[act] += kings;
+	  tmp_board.get_actions (vacts);
+	  if (vacts.empty ()) {
+	    victory_encountered = true;
+	    black_victory = !tmp_board.is_black_move ();
+	    break;
+	  }
+	}
       }
+
+      if (!victory_encountered) {
+	if (black_move) {
+	  tmp_board.count_black (men, kings);
+	  men_count[act] += men;
+	  kings_count[act] += kings;
+
+	  tmp_board.count_white (men, kings);
+	  men_count[act] -= men;
+	  kings_count[act] -= kings;
+	} else {
+	  tmp_board.count_black (men, kings);
+	  men_count[act] -= men;
+	  kings_count[act] -= kings;
+
+	  tmp_board.count_white (men, kings);
+	  men_count[act] += men;
+	  kings_count[act] += kings;
+	}
+      } else {
+	if (black_victory) {
+	  if (black_move) {
+	    tmp_board.count_black (men, kings);
+	    men_count[act] += men;
+	    kings_count[act] += kings;
+	  } else {
+	    tmp_board.count_black (men, kings);
+	    men_count[act] -= men;
+	    kings_count[act] -= kings;
+	  }
+	} else {
+	  if (black_move) {
+	    tmp_board.count_white (men, kings);
+	    men_count[act] -= men;
+	    kings_count[act] -= kings;
+	  } else {
+	    tmp_board.count_white (men, kings);
+	    men_count[act] += men;
+	    kings_count[act] += kings;
+	  }
+	}
+      }
+
     }
   }
 
@@ -71,7 +109,7 @@ _bgm_strategy_monte_carlo<T>::operator () (const _bgm_board<T>& board, const std
   int max_ind = 0;
   double max_val = -32.;
 
-  std::vector<std::pair<int, double>> candidates;
+  std::vector<int> candidates;
 
   for (int i = 0; i < num_actions; i++) {
     if (score[i] > max_val) {
@@ -82,7 +120,7 @@ _bgm_strategy_monte_carlo<T>::operator () (const _bgm_board<T>& board, const std
 
   for (int i = 0; i < num_actions; i++) {
     if (score[i] >= max_val) {
-      candidates.push_back (std::make_pair (i, score[i]));
+      candidates.push_back (i);
     }
   }
   
@@ -92,7 +130,8 @@ _bgm_strategy_monte_carlo<T>::operator () (const _bgm_board<T>& board, const std
     return in[max_ind];
   }
 
-  return in[(int)std::round ((double) (std::rand()*(num_cands - 1)/RAND_MAX))];
+  int cand_ind = (int)std::round ((double) std::rand()*(num_cands-1)/((double)RAND_MAX));
+  return in[candidates[cand_ind]];
 }
 
 template class _bgm_strategy_monte_carlo<int8_t>;
