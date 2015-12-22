@@ -1,6 +1,6 @@
 #include <cstdint>
 
-void position_to_row_col (int pos, int& row, int& col)
+void _bgm_position_to_row_col (int pos, int& row, int& col)
 {
   for (int i = 0; i < 8; i++)
     {

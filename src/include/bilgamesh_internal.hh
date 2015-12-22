@@ -109,4 +109,7 @@ _bgm_string_to_board (T s, uint64_t& bhboard, uint64_t& whboard);
 void
 _bgm_position_to_row_col (int, int&, int&);
 
+void
+_bgm_hrki (int, int, double);
+
 #endif // BILGAMESH_INTERNAL_HH

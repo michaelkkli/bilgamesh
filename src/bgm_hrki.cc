@@ -4,7 +4,7 @@
 #include <string>
 
 void
-_bgm_hrki ()
+_bgm_hrki (int games, int depth, double multiplier)
 {
   char bw;
   int L;
@@ -42,7 +42,7 @@ _bgm_hrki ()
   std::vector<_bgm_action<int8_t>> vacts;
   board.get_actions (vacts);
 
-  _bgm_strategy_monte_carlo<int8_t> mc_strat (100, 7, 1.5);
+  _bgm_strategy_monte_carlo<int8_t> mc_strat (games, depth, multiplier);
 
   _bgm_action<int8_t> tmp_act = mc_strat (board, vacts);
 
