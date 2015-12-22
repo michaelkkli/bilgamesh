@@ -31,6 +31,13 @@ _bgm_action<T>::is_man_to_king () const
 }
 
 template <class T>
+bool
+_bgm_action<T>::is_capture () const
+{
+  return move_capture == _bgm_capture;
+}
+
+template <class T>
 T
 _bgm_action<T>::first () const
 {
@@ -63,6 +70,7 @@ template <class T>
 _bgm_action<T>&
 _bgm_action<T>::join (const _bgm_action<T>& in)
 {
+  intermediate_hops.push_back (end_);
   end_ = in.end_;
   captured_men.insert (captured_men.end(), in.captured_men.begin (), in.captured_men.end ());
   captured_kings.insert (captured_kings.end(), in.captured_kings.begin (), in.captured_kings.end ());
@@ -118,6 +126,19 @@ _bgm_action<T>::apply (uint64_t* board) const
   } else {
     board[0] = y; board[1] = x;
   }
+}
+
+template <class T>
+void
+_bgm_action<T>::get_all_hop_positions (std::vector<int>& out) const
+{
+  out.clear ();
+  out.push_back (start_);
+  for (auto i : intermediate_hops)
+    {
+      out.push_back ((int)i);
+    }
+  out.push_back (end_);
 }
 
 template <class T>

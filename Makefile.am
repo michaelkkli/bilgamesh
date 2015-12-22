@@ -14,7 +14,7 @@ check_PROGRAMS = $(TESTS)
 
 noinst_LIBRARIES = libbgm_internal.a
 
-libbgm_internal_a_SOURCES = src/bgm_action.cc src/bgm_board.cc src/bgm_get_reverse_bitpairs.cc src/bgm_get_occupied_positions.cc src/bgm_strategy_random.cc src/bgm_strategy_monte_carlo.cc
+libbgm_internal_a_SOURCES = src/bgm_action.cc src/bgm_board.cc src/bgm_get_reverse_bitpairs.cc src/bgm_get_occupied_positions.cc src/bgm_strategy_random.cc src/bgm_strategy_monte_carlo.cc src/bgm_string_to_board.cc src/bgm_position_to_row_col.cc src/bgm_hrki.cc
 libbgm_internal_a_CPPFLAGS = -I"$(srcdir)/src/include"
 
 src_test_success_test_SOURCES = src/test/success.cc

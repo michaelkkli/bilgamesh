@@ -70,6 +70,13 @@ _bgm_board<T>::set (const std::vector<int>& men_black, const std::vector<int>& k
 
 template <class T>
 void
+_bgm_board<T>::set_raw (uint64_t& b, uint64_t& w)
+{
+  hboard[0] = b; hboard[1] = w;
+}
+
+template <class T>
+void
 _bgm_board<T>::apply (const _bgm_action<T>& in)
 {
   in.apply (hboard);

@@ -24,11 +24,13 @@ class _bgm_action {
     _bgm_action (bool, _bgm_move_capture, _bgm_piece_to_piece, T start, T end, const std::vector<T>& = {}, const std::vector<T>& = {});
     operator bool () const;
     bool is_man_to_king () const;
+    bool is_capture () const;
     T first () const;
     T last () const;
     _bgm_action<T> clone () const;
     _bgm_action<T>& join (const _bgm_action<T>&);
     void apply (uint64_t* board) const;
+    void get_all_hop_positions (std::vector<int>&) const;
   private:
     bool black_move;
     _bgm_move_capture move_capture;
@@ -37,6 +39,7 @@ class _bgm_action {
     T end_;
     std::vector<T> captured_men;
     std::vector<T> captured_kings;
+    std::vector<T> intermediate_hops;
 };
 
 template <class T>
@@ -51,6 +54,7 @@ class _bgm_board {
     bool swap_turn ();
     void count_black (int& men, int& kings) const;
     void count_white (int& men, int& kings) const;
+    void set_raw (uint64_t&, uint64_t&);
     void set (const std::vector<int>& men_black, const std::vector<int>& kings_black, const std::vector<int>& men_white, const std::vector<int>& kings_white, bool bm);
     void apply (const _bgm_action<T>&);
     void get_actions (std::vector<_bgm_action<T>>&);
@@ -97,5 +101,12 @@ _bgm_get_occupied_positions (uint64_t, std::vector<int8_t>&, int max);
 
 uint64_t
 _bgm_get_reverse_bitpairs (uint64_t);
+
+template <class T>
+void
+_bgm_string_to_board (T s, uint64_t& bhboard, uint64_t& whboard);
+
+void
+_bgm_position_to_row_col (int, int&, int&);
 
 #endif // BILGAMESH_INTERNAL_HH
