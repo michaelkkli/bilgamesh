@@ -70,7 +70,11 @@ template <class T>
 _bgm_action<T>&
 _bgm_action<T>::join (const _bgm_action<T>& in)
 {
-  intermediate_hops.push_back (end_);
+  if (black_move) {
+    intermediate_hops.push_back (end_);
+  } else {
+    intermediate_hops.push_back (33 - end_);
+  }
   end_ = in.end_;
   captured_men.insert (captured_men.end(), in.captured_men.begin (), in.captured_men.end ());
   captured_kings.insert (captured_kings.end(), in.captured_kings.begin (), in.captured_kings.end ());
