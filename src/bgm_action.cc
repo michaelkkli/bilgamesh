@@ -137,12 +137,12 @@ void
 _bgm_action<T>::get_all_hop_positions (std::vector<int>& out) const
 {
   out.clear ();
-  out.push_back (start_);
+  out.push_back (first ());
   for (auto i : intermediate_hops)
     {
       out.push_back ((int)i);
     }
-  out.push_back (end_);
+  out.push_back (last ());
 }
 
 template <class T>
