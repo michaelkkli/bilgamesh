@@ -111,12 +111,18 @@ _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
   std::vector<_bgm_action<T>> chains;
   uint64_t tmp_board[2];
 
+  const bool promotion_ends_turn = false;
+
   for (auto pos : men_pos) {
     get_step_man_capture (chboard, ohboard, pos, captures);
 
     for (auto cap : captures) {
       if (cap.is_man_to_king()) {
-	actions.push_back (cap);
+	if (!promotion_ends_turn) {
+	  chains.push_back (cap);
+	} else {
+	  actions.push_back (cap);
+	}
       } else {
 	chains.push_back (cap);
       }
@@ -130,14 +136,17 @@ _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
       tmp_board[1] = ohboard;
       chain.apply (tmp_board);
 
-      get_step_man_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+      if (black_move) {
+	get_step_man_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+      } else {
+	get_step_man_capture (tmp_board[0], tmp_board[1], 33 - chain.last (), captures);
+      }
 
       if (captures.empty ()) {
 	actions.push_back (chain);
       } else {
 	for (auto cap : captures) {
 	  if (cap.is_man_to_king()) {
-	    const bool promotion_ends_turn = false;
 	    if (!promotion_ends_turn) {
 	      chains.push_back (chain.clone().join(cap));
 	    } else {
@@ -166,7 +175,11 @@ _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
       tmp_board[1] = ohboard;
       chain.apply (tmp_board);
 
-      get_step_king_capture (tmp_board[0], tmp_board[1], chain.last(), captures);
+      if (black_move) {
+	get_step_king_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+      } else {
+	get_step_king_capture (tmp_board[0], tmp_board[1], 33 - chain.last (), captures);
+      }
 
       if (captures.empty ()) {
 	actions.push_back (chain);
