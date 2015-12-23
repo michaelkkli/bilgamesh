@@ -136,10 +136,10 @@ _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
       tmp_board[1] = ohboard;
       chain.apply (tmp_board);
 
-      if (black_move) {
+      if (chain.is_man_to_man ()) {
 	get_step_man_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
       } else {
-	get_step_man_capture (tmp_board[0], tmp_board[1], 33 - chain.last (), captures);
+	get_step_king_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
       }
 
       if (captures.empty ()) {
@@ -175,11 +175,7 @@ _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
       tmp_board[1] = ohboard;
       chain.apply (tmp_board);
 
-      if (black_move) {
-	get_step_king_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
-      } else {
-	get_step_king_capture (tmp_board[0], tmp_board[1], 33 - chain.last (), captures);
-      }
+      get_step_king_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
 
       if (captures.empty ()) {
 	actions.push_back (chain);
