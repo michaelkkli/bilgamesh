@@ -112,11 +112,11 @@ _bgm_action<T>::apply (uint64_t* board) const
   uint64_t op_men = 0x0ULL, op_kings = 0x0ULL;
 
   for (auto i : captured_men ) {
-    op_men |= (0x01ULL << 2*(i - 1));
+    op_men |= (0x3ULL << 2 * (33 - i - 1));
   }
 
   for (auto i : captured_kings) {
-    op_kings |= (0x10ULL << 2*(i - 1));
+    op_kings |= (0x3ULL << 2 * (33 - i - 1));
   }
 
   y = (y & ~op_men & ~op_kings);
