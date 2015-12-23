@@ -137,7 +137,12 @@ _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
       } else {
 	for (auto cap : captures) {
 	  if (cap.is_man_to_king()) {
-	    actions.push_back (chain.clone().join(cap));
+	    const bool promotion_ends_turn = false;
+	    if (!promotion_ends_turn) {
+	      chains.push_back (chain.clone().join(cap));
+	    } else {
+	      actions.push_back (chain.clone().join(cap));
+	    }
 	  } else {
 	    chains.push_back (chain.clone().join(cap));
 	  }
@@ -232,7 +237,7 @@ _bgm_board<T>::get_step_man_capture (uint64_t chboard, uint64_t ohboard, int pos
       landing_pos = (0x3ULL << 2*(pos - 1 + clear_offset));
       capture_pos = (0x3ULL << 2*(pos - 1 + capture_offset));
 
-      if (!(overlap & landing_pos) & (other & capture_pos)) {
+      if (!(overlap & landing_pos) && (other & capture_pos)) {
 	if (other & (0x1ULL << 2*(pos - 1 + capture_offset))) {
 	  men_captured = {(T)(pos + capture_offset)};
 	  kings_captured = {};
@@ -367,7 +372,7 @@ _bgm_board<T>::get_step_king_capture (uint64_t chboard, uint64_t ohboard, int po
       landing_pos = (0x3ULL << 2*(pos - 1 + clear_offset));
       capture_pos = (0x3ULL << 2*(pos - 1 + capture_offset));
 
-      if (!(overlap & landing_pos) & (other & capture_pos)) {
+      if (!(overlap & landing_pos) && (other & capture_pos)) {
 	if (other & (0x1ULL << 2*(pos - 1 + capture_offset))) {
 	  men_captured = {(T)(pos + capture_offset)};
 	  kings_captured = {};
