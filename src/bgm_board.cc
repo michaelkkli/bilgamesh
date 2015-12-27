@@ -132,14 +132,26 @@ _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
       auto chain = chains.back ();
       chains.pop_back ();
 
-      tmp_board[0] = chboard;
-      tmp_board[1] = ohboard;
-      chain.apply (tmp_board);
+      if (black_move) {
+	tmp_board[0] = chboard;
+	tmp_board[1] = ohboard;
+	chain.apply (tmp_board);
 
-      if (chain.is_man_to_man ()) {
-	get_step_man_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+	if (chain.is_man_to_man ()) {
+	  get_step_man_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+	} else {
+	  get_step_king_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+	}
       } else {
-	get_step_king_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+	tmp_board[0] = ohboard;
+	tmp_board[1] = chboard;
+	chain.apply (tmp_board);
+
+	if (chain.is_man_to_man ()) {
+	  get_step_man_capture (tmp_board[1], tmp_board[0], 33 - chain.last (), captures);
+	} else {
+	  get_step_king_capture (tmp_board[1], tmp_board[0], 33 - chain.last (), captures);
+	}
       }
 
       if (captures.empty ()) {
@@ -171,11 +183,19 @@ _bgm_board<T>::get_actions (std::vector<_bgm_action<T>>& actions)
       auto chain = chains.back ();
       chains.pop_back ();
 
-      tmp_board[0] = chboard;
-      tmp_board[1] = ohboard;
-      chain.apply (tmp_board);
+      if (black_move) {
+	tmp_board[0] = chboard;
+	tmp_board[1] = ohboard;
+	chain.apply (tmp_board);
 
-      get_step_king_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+	get_step_king_capture (tmp_board[0], tmp_board[1], chain.last (), captures);
+      } else {
+	tmp_board[0] = ohboard;
+	tmp_board[1] = chboard;
+	chain.apply (tmp_board);
+
+	get_step_king_capture (tmp_board[1], tmp_board[0], 33 - chain.last (), captures);
+      }
 
       if (captures.empty ()) {
 	actions.push_back (chain);
