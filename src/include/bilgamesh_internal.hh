@@ -23,6 +23,7 @@ class _bgm_action {
     _bgm_action ();
     _bgm_action (bool, _bgm_move_capture, _bgm_piece_to_piece, T start, T end, const std::vector<T>& = {}, const std::vector<T>& = {});
     operator bool () const;
+    bool is_man_to_man () const;
     bool is_man_to_king () const;
     bool is_capture () const;
     T first () const;
@@ -88,12 +89,14 @@ class _bgm_strategy_random {
 template <class T>
 class _bgm_strategy_monte_carlo {
   public:
-    _bgm_strategy_monte_carlo (int games = 100, int moves = 100, double king_multiplier = 1.5);
+    _bgm_strategy_monte_carlo (int games, int moves, double king_multiplier, int capture_games, int capture_moves);
     _bgm_action<T> operator () (const _bgm_board<T>&, const std::vector<_bgm_action<T>>&);
   private:
     int num_games;
     int num_moves;
     double kings_multiplier;
+    int num_games_capture;
+    int num_moves_capture;
 };
 
 void
@@ -110,6 +113,6 @@ void
 _bgm_position_to_row_col (int, int&, int&);
 
 void
-_bgm_hrki (int, int, double);
+_bgm_hrki (int, int, double, int, int);
 
 #endif // BILGAMESH_INTERNAL_HH

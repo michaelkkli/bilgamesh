@@ -7,7 +7,7 @@ int main (int argc, char *argv[])
   _bgm_board<int8_t> board;
   std::vector<_bgm_action<int8_t>> vacts;
   _bgm_strategy_random<int8_t> rand_strat;
-  _bgm_strategy_monte_carlo<int8_t> mc_strat (12, 7, 1.5);
+  _bgm_strategy_monte_carlo<int8_t> mc_strat (12, 7, 1.5, 12, 7);
   _bgm_action<int8_t> tmp;
 
   const int num_games = 100;

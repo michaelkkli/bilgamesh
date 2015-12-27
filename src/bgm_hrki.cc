@@ -4,7 +4,7 @@
 #include <string>
 
 void
-_bgm_hrki (int games, int depth, double multiplier)
+_bgm_hrki (int num_games, int num_moves, double multiplier, int num_games_capture, int num_moves_capture)
 {
   char bw;
   int L;
@@ -42,7 +42,7 @@ _bgm_hrki (int games, int depth, double multiplier)
   std::vector<_bgm_action<int8_t>> vacts;
   board.get_actions (vacts);
 
-  _bgm_strategy_monte_carlo<int8_t> mc_strat (games, depth, multiplier);
+  _bgm_strategy_monte_carlo<int8_t> mc_strat (num_games, num_moves, multiplier, num_games_capture, num_moves_capture);
 
   _bgm_action<int8_t> tmp_act = mc_strat (board, vacts);
 
@@ -62,20 +62,12 @@ _bgm_hrki (int games, int depth, double multiplier)
     std::vector<int> positions;
 
     tmp_act.get_all_hop_positions (positions);
-    std::cout << positions.size () << "\n";
-
-    pos = tmp_act.first ();
-    _bgm_position_to_row_col (pos, row, col);
-    std::cout << row << " " << col << "\n";
+    std::cout << positions.size () - 1 << "\n";
 
     for (auto i : positions)
       {
 	_bgm_position_to_row_col (i, row, col);
 	std::cout << row << " " << col << "\n";
       }
-
-    pos = tmp_act.last ();
-    _bgm_position_to_row_col (pos, row, col);
-    std::cout << row << " " << col << std::endl;
   }
 }

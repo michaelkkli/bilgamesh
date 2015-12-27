@@ -5,8 +5,8 @@
 #include <vector>
 
 template <class T>
-_bgm_strategy_monte_carlo<T>::_bgm_strategy_monte_carlo (int g, int m, double km) :
-  num_games (g), num_moves(m), kings_multiplier(km)
+_bgm_strategy_monte_carlo<T>::_bgm_strategy_monte_carlo (int g, int m, double km, int ngc, int nmc) :
+  num_games (g), num_moves(m), kings_multiplier(km), num_games_capture(ngc), num_moves_capture(nmc)
 {
 }
 
@@ -33,8 +33,19 @@ _bgm_strategy_monte_carlo<T>::operator () (const _bgm_board<T>& board, const std
   std::vector<_bgm_action<int8_t>> vacts;
   _bgm_strategy_random<int8_t> rand_strat;
 
+  int local_num_games;
+  int local_num_moves;
+
+  if (!in[0].is_capture ()) {
+    local_num_games = num_games;
+    local_num_moves = num_moves;
+  } else {
+    local_num_games = num_games_capture;
+    local_num_moves = num_moves_capture;
+  }
+
   for (int act = 0; act < num_actions; act++) {
-    for (int game = 0; game < num_games; game++) {
+    for (int game = 0; game < local_num_games; game++) {
       victory_encountered = false;
 
       tmp_board = board;
@@ -45,8 +56,19 @@ _bgm_strategy_monte_carlo<T>::operator () (const _bgm_board<T>& board, const std
 	victory_encountered = true;
 	black_victory = !tmp_board.is_black_move ();
       } else {
-	for (int move = 0; move < num_moves; move++) {
-	  tmp_board.apply (rand_strat (board, vacts));
+	if (!in[0].is_capture ()) {
+	  local_num_moves = num_moves;
+	} else {
+	  local_num_moves = num_moves_capture;
+	}
+
+	for (int move = 0; move < local_num_moves; move++) {
+	  _bgm_action<int8_t> tmp_act = rand_strat (board, vacts);
+	  if (tmp_act.is_capture ()) {
+	    local_num_moves = num_moves_capture;
+	  }
+
+	  tmp_board.apply (tmp_act);
 
 	  tmp_board.get_actions (vacts);
 	  if (vacts.empty ()) {

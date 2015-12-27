@@ -25,6 +25,13 @@ _bgm_action<T>::operator bool() const
 
 template <class T>
 bool
+_bgm_action<T>::is_man_to_man () const
+{
+  return _bgm_man_to_man == piece_to_piece;
+}
+
+template <class T>
+bool
 _bgm_action<T>::is_man_to_king () const
 {
   return _bgm_man_to_king == piece_to_piece;
