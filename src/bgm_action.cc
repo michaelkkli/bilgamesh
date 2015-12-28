@@ -106,7 +106,7 @@ _bgm_action<T>::apply (uint64_t* board) const
   }
 
   const uint64_t start_pos = (0x3ULL << 2*(start_ - 1));
-  const uint64_t not_start_pos = !start_pos;
+  const uint64_t not_start_pos = ~start_pos;
   const uint64_t end_pos = (0x3ULL << 2*(end_ - 1));
 
   x = (x & not_start_pos);
