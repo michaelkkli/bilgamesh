@@ -58,14 +58,17 @@ _bgm_strategy_monte_carlo<T>::operator () (const _bgm_board<T>& board, const std
       } else {
 	if (!in[0].is_capture ()) {
 	  local_num_moves = num_moves;
+	  local_num_games = num_games;
 	} else {
 	  local_num_moves = num_moves_capture;
+	  local_num_games = num_games_capture;
 	}
 
 	for (int move = 0; move < local_num_moves; move++) {
 	  _bgm_action<int8_t> tmp_act = rand_strat (board, vacts);
 	  if (tmp_act.is_capture ()) {
 	    local_num_moves = num_moves_capture;
+	    local_num_games = num_games_capture;
 	  }
 
 	  tmp_board.apply (tmp_act);

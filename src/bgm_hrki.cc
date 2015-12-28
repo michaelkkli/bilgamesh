@@ -4,7 +4,7 @@
 #include <string>
 
 void
-_bgm_hrki (int num_games, int num_moves, double multiplier, int num_games_capture, int num_moves_capture)
+_bgm_hrki (int num_games, int num_moves, double multiplier, int num_games_capture, int num_moves_capture, bool use_opening_book)
 {
   char bw;
   int L;
@@ -33,10 +33,24 @@ _bgm_hrki (int num_games, int num_moves, double multiplier, int num_games_captur
   _bgm_string_to_board (positions, tmp_board[0], tmp_board[1]);
 
   _bgm_board<int8_t> board;
-  if ('w' == bw)
-    {
+  if ('b' == bw) {
+    if (use_opening_book) {
+      if (0x555555ULL == tmp_board[1]) {
+	// Old Faithful: open 11-15.
+	std::cout << "1\n2 5\n3 4" << std::endl;
+	return;
+      }
+    }
+  } else {
+    if (use_opening_book) {
+      if (0x10455555ULL == tmp_board[0]) {
+	// Play 23-18 against 11-15.
+	std::cout << "1\n5 4\n4 3" << std::endl;
+	return;
+      }
       board.swap_turn ();
     }
+  }
   board.set_raw (tmp_board[0], tmp_board[1]);
 
   std::vector<_bgm_action<int8_t>> vacts;

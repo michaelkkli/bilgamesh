@@ -11,7 +11,8 @@ TESTS = src/test/success.test \
 
 XFAIL_TESTS = src/test/xfail.test
 
-check_PROGRAMS = $(TESTS) src/test/bgm_hrki-1.test
+check_PROGRAMS = $(TESTS) \
+	src/test/bgm_hrki_util.test 
 
 noinst_LIBRARIES = libbgm_internal.a
 
@@ -21,9 +22,9 @@ libbgm_internal_a_CPPFLAGS = -I"$(srcdir)/src/include"
 src_test_success_test_SOURCES = src/test/success.cc
 src_test_xfail_test_SOURCES = src/test/xfail.cc
 
-src_test_bgm_hrki_1_test_SOURCES = src/test/bgm_hrki-1.cc
-src_test_bgm_hrki_1_test_CPPFLAGS = -I"$(srcdir)/src/include"
-src_test_bgm_hrki_1_test_LDADD = libbgm_internal.a
+src_test_bgm_hrki_util_test_SOURCES = src/test/bgm_hrki_util.cc
+src_test_bgm_hrki_util_test_CPPFLAGS = -I"$(srcdir)/src/include"
+src_test_bgm_hrki_util_test_LDADD = libbgm_internal.a
 
 src_test_bgm_strategy_monte_carlo_3_test_SOURCES = src/test/bgm_strategy_monte_carlo-3.cc
 src_test_bgm_strategy_monte_carlo_3_test_CPPFLAGS = -I"$(srcdir)/src/include"

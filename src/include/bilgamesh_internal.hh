@@ -113,6 +113,6 @@ void
 _bgm_position_to_row_col (int, int&, int&);
 
 void
-_bgm_hrki (int, int, double, int, int);
+_bgm_hrki (int, int, double, int, int, bool);
 
 #endif // BILGAMESH_INTERNAL_HH
