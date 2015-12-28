@@ -55,7 +55,7 @@ class _bgm_board {
     bool swap_turn ();
     void count_black (int& men, int& kings) const;
     void count_white (int& men, int& kings) const;
-    void set_raw (uint64_t&, uint64_t&);
+    void set_raw (const uint64_t&, const uint64_t&);
     void set (const std::vector<int>& men_black, const std::vector<int>& kings_black, const std::vector<int>& men_white, const std::vector<int>& kings_white, bool bm);
     void apply (const _bgm_action<T>&);
     void get_actions (std::vector<_bgm_action<T>>&);
