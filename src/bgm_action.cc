@@ -86,7 +86,7 @@ _bgm_action<T>::join (const _bgm_action<T>& in)
   captured_men.insert (captured_men.end(), in.captured_men.begin (), in.captured_men.end ());
   captured_kings.insert (captured_kings.end(), in.captured_kings.begin (), in.captured_kings.end ());
 
-  if ((_bgm_man_to_man == piece_to_piece) & (_bgm_man_to_man != in.piece_to_piece)) {
+  if ((_bgm_man_to_man == piece_to_piece) && (_bgm_man_to_man != in.piece_to_piece)) {
     piece_to_piece = _bgm_man_to_king;
   }
 
