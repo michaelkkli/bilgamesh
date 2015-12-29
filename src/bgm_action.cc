@@ -1,4 +1,5 @@
 #include "bilgamesh_internal.hh"
+#include <sstream>
 #include <utility>
 #include <cstdint>
 
@@ -21,6 +22,21 @@ template <class T>
 _bgm_action<T>::operator bool() const
 {
   return 0 != start_;
+}
+
+template <class T>
+bool
+_bgm_action<T>::operator == (const std::string& s) const
+{
+  size_t p = s.find_first_of ('-');
+  T a = (T)std::stoi(s.substr (0, p));
+  T b = (T)std::stoi(s.substr (p + 1));
+
+  if ( black_move ) {
+    return (a == start_) && (b == end_);
+  } else {
+    return (a == 33 - start_) && (b == 33 - end_);
+  }
 }
 
 template <class T>

@@ -77,6 +77,13 @@ _bgm_board<T>::set_raw (const uint64_t& b, const uint64_t& w)
 
 template <class T>
 void
+_bgm_board<T>::get_raw (uint64_t& b, uint64_t& w) const
+{
+  b = hboard[0]; w = hboard[1];
+}
+
+template <class T>
+void
 _bgm_board<T>::apply (const _bgm_action<T>& in)
 {
   in.apply (hboard);

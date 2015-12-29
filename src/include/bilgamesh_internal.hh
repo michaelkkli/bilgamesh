@@ -8,6 +8,7 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include <random>
 #include <set>
 #include <utility>
@@ -23,6 +24,7 @@ class _bgm_action {
     _bgm_action ();
     _bgm_action (bool, _bgm_move_capture, _bgm_piece_to_piece, T start, T end, const std::vector<T>& = {}, const std::vector<T>& = {});
     operator bool () const;
+    bool operator == (const std::string&) const;
     bool is_man_to_man () const;
     bool is_man_to_king () const;
     bool is_capture () const;
@@ -56,6 +58,7 @@ class _bgm_board {
     void count_black (int& men, int& kings) const;
     void count_white (int& men, int& kings) const;
     void set_raw (const uint64_t&, const uint64_t&);
+    void get_raw (uint64_t&, uint64_t&) const;
     void set (const std::vector<int>& men_black, const std::vector<int>& kings_black, const std::vector<int>& men_white, const std::vector<int>& kings_white, bool bm);
     void apply (const _bgm_action<T>&);
     void get_actions (std::vector<_bgm_action<T>>&);
@@ -97,6 +100,19 @@ class _bgm_strategy_monte_carlo {
     double kings_multiplier;
     int num_games_capture;
     int num_moves_capture;
+};
+
+class _bgm_obk {
+  public:
+    void insert_accepted (uint64_t other, std::string move, uint64_t current);
+    void insert_rejected (uint64_t other, std::string move, uint64_t current);
+    void find (uint64_t other, uint64_t current, std::vector<std::string>& accepted, std::vector<std::string>* rejected = 0) const;
+  private:
+    std::multimap<uint64_t, std::string> other_to_accepted;
+    std::multimap<std::string, uint64_t> accepted_to_current;
+
+    std::multimap<uint64_t, std::string> other_to_rejected;
+    std::multimap<std::string, uint64_t> rejected_to_current;
 };
 
 void
