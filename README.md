@@ -1,5 +1,5 @@
 # Bilgamesh
-Toy problem to test C++11 features and performance.
+Monte Carlo strategy for Checkers on Hacker Rank in C++11.
 
 ## Developer Notes
 
